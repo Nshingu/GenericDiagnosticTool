@@ -1,0 +1,21 @@
+name: Build .NET App
+on: [push, workflow_dispatch] # Se lance à chaque modif ou manuellement
+
+jobs:
+  build:
+    runs-on: windows-latest # On utilise Windows pour générer un .exe
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # Ou la version requise par le projet
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GenericDiagnosticTool-Exe
+          path: "**/bin/Release/**"
